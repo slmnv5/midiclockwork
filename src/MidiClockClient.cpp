@@ -1,13 +1,6 @@
 #include "pch.hpp"
 #include "utils.hpp"
 #include "MidiClockClient.hpp"
-#include <fcntl.h>
-#include <linux/input.h>
-
-MidiClockClient::MidiClockClient(const char *clientName, const char *dstName) : MidiClient(clientName, nullptr, dstName)
-{
-    run();
-}
 
 void MidiClockClient::run()
 {
