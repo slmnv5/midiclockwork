@@ -4,12 +4,30 @@
 #include <fcntl.h>
 #include <linux/input.h>
 
-int find_midi_client(const std::string &name_part, unsigned int capability, int &cli_id, int &cli_port)
+void MidiClient::subscribe(const char *name_part, bool is_input)
+{
+	if (nullptr == name_part)
+	{
+		return;
+	}
+
+	int id,
+		port, result;
+	unsigned int capability = is_input ? SND_SEQ_PORT_CAP_READ | SND_SEQ_PORT_CAP_SUBS_READ : SND_SEQ_PORT_CAP_WRITE | SND_SEQ_PORT_CAP_SUBS_WRITE;
+	result = find_midi_client(name_part, capability, id, port);
+	std::string msg(name_part + is_input ? " input " : " output ");
+	if (result < 0)
+	{
+		throw std::runtime_error("Error finding source MIDI port: " + std::string(name_part));
+	}
+	LOG(LogLvl::INFO) << "Connected to MIDI port: " << name_part << (is_input ? " input " : " output ") << id << ":" << port;
+}
+
+int MidiClient::find_midi_client(const std::string &name_part, unsigned int capability, int &cli_id, int &cli_port)
 {
 	cli_id = cli_port = -1;
 	snd_seq_client_info_t *cinfo;
 	snd_seq_port_info_t *pinfo;
-	snd_seq_t *seq_handle;
 
 	snd_seq_client_info_alloca(&cinfo);
 	snd_seq_port_info_alloca(&pinfo);
@@ -43,8 +61,6 @@ int find_midi_client(const std::string &name_part, unsigned int capability, int 
 	return -1;
 }
 
-//======================================================
-
 void MidiClient::open_alsa_connections(const char *clientName, const char *srcName, const char *dstName)
 {
 	const std::string clName = std::string(clientName).substr(0, 15);
@@ -72,8 +88,11 @@ void MidiClient::open_alsa_connections(const char *clientName, const char *srcNa
 	LOG(LogLvl::INFO) << "MIDI ports created: IN=" << client << ":" << inport << " OUT="
 					  << client << ":" << outport;
 
+	cout << 122222222222;
 	subscribe(srcName, true);
+	cout << 3333322222222222;
 	subscribe(dstName, false);
+	cout << 55555522222222222;
 }
 
 void MidiClient::send_event(snd_seq_event_t *event) const

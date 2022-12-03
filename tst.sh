@@ -6,6 +6,6 @@ killall -9 pimidiclock
 sleep 1
 
 # start this app.
-./pimidiclock -n aaaabbbb -d sss -b 121.55 $@  &
+./pimidiclock_d -n aaaabbbb -d sss -b 121.55 -vvv
 
 

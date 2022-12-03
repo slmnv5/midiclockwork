@@ -59,15 +59,16 @@ int main(int argc, char *argv[])
 	{
 
 		midiClockClient = new MidiClockClient(clientName, dstName);
+		cout << 333333333 << bpm;
 		float fbpm = std::stof(std::string(bpm));
+		cout << 333333333 << 555555555;
 		fbpm = max(fbpm, 20.0F);
 		fbpm = min(fbpm, 1200.0F);
-
-		float sleep_time = 60 / fbpm / 96;
-		midiClockClient->set_sleep(sleep_time);
+		cout << 11111111111111111 << fbpm;
+		midiClockClient->set_sleep(11.222);
 
 		LOG(LogLvl::INFO) << "Using typing MIDI clock destination: " << dstName;
-		LOG(LogLvl::INFO) << "Starting MIDI clock sending BPM: " << bpm << " sleep: " << sleep_time;
+		LOG(LogLvl::INFO) << "Starting MIDI clock sending BPM: " << bpm;
 	}
 	catch (exception &e)
 	{
