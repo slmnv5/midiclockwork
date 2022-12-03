@@ -13,20 +13,20 @@ LDFLAGS := -pthread -lasound
 CPPFLAGS := -I$(SRC_DIR) -MMD -MP
 CXXFLAGS := -std=c++11 -g -Wno-psabi -Wall
  
-mimap_t: $(OBJ_TST)
+pimidiclock_t: $(OBJ_TST)
 	@echo "build app test and run unit tests"
 	cd $(PROJECT_ROOT)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -o $@ $^  $(LDFLAGS)
-	./mimap_t
+	./pimidiclock_t
 
-mimap_d: $(OBJ_APP)
+pimidiclock_d: $(OBJ_APP)
 	cd $(PROJECT_ROOT)
 	@echo "build debug version"
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -o $@ $^  $(LDFLAGS)
 	
 
-mimap5: CXXFLAGS = -std=c++11 -O2 -Wall
-mimap5: $(OBJ_APP)
+pimidiclock: CXXFLAGS = -std=c++11 -O2 -Wall
+pimidiclock: $(OBJ_APP)
 	@echo "Build release version"
 	cd $(PROJECT_ROOT)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -o $@ $^  $(LDFLAGS)
@@ -41,7 +41,7 @@ $(SRC_DIR)/%.cpp.o: $(SRC_DIR)/%.cpp $(SRC_DIR)/pch.hpp.gch
 
 clean:
 	cd $(PROJECT_ROOT)
-	rm -fv  $(OBJ_APP) $(OBJ_TST) ${DEPENDS} mimap_t mimap_d mimap5 $(SRC_DIR)/pch.hpp.gch 
+	rm -fv  $(OBJ_APP) $(OBJ_TST) ${DEPENDS} pimidiclock_t pimidiclock_d pimidiclock $(SRC_DIR)/pch.hpp.gch 
 
 	
 info:
