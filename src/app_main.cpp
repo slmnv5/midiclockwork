@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 {
 
 	const char *clientName = nullptr;
-	const char *kbdMapFile = nullptr;
+	const char *dstName = nullptr;
 	LOG::ReportingLevel() = LogLvl::ERROR;
 
 	for (int i = 1; i < argc; i++)
@@ -20,9 +20,9 @@ int main(int argc, char *argv[])
 		{
 			clientName = argv[i + 1];
 		}
-		else if (strcmp(argv[i], "-k") == 0 && i + 1 < argc)
+		else if (strcmp(argv[i], "-d") == 0 && i + 1 < argc)
 		{
-			kbdMapFile = argv[i + 1];
+			dstName = argv[i + 1];
 		}
 		else if (strcmp(argv[i], "-v") == 0)
 		{
@@ -44,18 +44,17 @@ int main(int argc, char *argv[])
 	}
 
 	if (clientName == nullptr)
-		clientName = "mimap";
+		clientName = "miclock";
 
-	LOG(LogLvl::INFO) << "MIDI client name: " << clientName;
-	MidiClockClient *midiKbdClient = nullptr;
+	LOG(LogLvl::INFO) << "MIDI clock client name: " << clientName;
+	MidiClockClient *midiClockClient = nullptr;
 
 	try
 	{
 
-		midiKbdClient = new MidiClockClient(clientName, kbdMapFile);
-		LOG(LogLvl::INFO) << "Using typing keyboard as source with map: " << kbdMapFile;
-		LOG(LogLvl::INFO) << "Starting MIDI messages processing";
-		midiKbdClient->run();
+		midiClockClient = new MidiClockClient(clientName, dstName);
+		LOG(LogLvl::INFO) << "Using typing MIDI clock destination: " << dstName;
+		LOG(LogLvl::INFO) << "Starting MIDI clock sending";
 	}
 	catch (exception &e)
 	{
@@ -67,8 +66,8 @@ int main(int argc, char *argv[])
 void help()
 {
 	cout << "Usage: mimap5 -r <file> [options] \n"
-			"  -k <kbdMapFile> use typing keyboard for MIDI notes, needs sudo\n"
-			"  -n [name] output MIDI port name to create\n"
+			"  -d <dstName> MIDI port to connect and send clock\n"
+			"  -n [name] name of my MIDI port\n"
 			"  -v verbose output\n"
 			"  -vv more verbose\n"
 			"  -vvv even more verbose\n"
