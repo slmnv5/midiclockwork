@@ -7,10 +7,12 @@ class MidiClockClient : public MidiClient
 {
 private:
     float sleep_time = 2.0 / 96; // bar is 2 seconds
-    bool stopped = false;
+    bool stopped = true;
 
 public:
-    MidiClockClient(const char *clientName, const char *dstName);
+    MidiClockClient(const char *clientName, const char *dstName) : MidiClient(clientName, nullptr, dstName)
+    {
+    }
     virtual ~MidiClockClient()
     {
     }
@@ -19,7 +21,7 @@ public:
         this->sleep_time = sleep_time;
     }
 
-    void send_external(unsigned byte msg_type )
+    void send_external(unsigned char msg_type)
     {
         snd_seq_event_t *event;
         snd_seq_ev_clear(event);
@@ -27,7 +29,12 @@ public:
         send_event(event);
     }
 
-private:
+    void start_stop()
+    {
+        stopped = !stopped;
+        unsigned char msg = stopped ? 0xFC : 0xFA;
+        this->send_external(msg);
+    }
     void run();
 };
 

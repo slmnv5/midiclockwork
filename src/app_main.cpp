@@ -62,8 +62,9 @@ int main(int argc, char *argv[])
 		float fbpm = atof(bpm);
 		float sleep_time = 60 / fbpm / 96;
 		midiClockClient->set_sleep(sleep_time);
+
 		LOG(LogLvl::INFO) << "Using typing MIDI clock destination: " << dstName;
-		LOG(LogLvl::INFO) << "Starting MIDI clock sending";
+		LOG(LogLvl::INFO) << "Starting MIDI clock sending BPM: " << bpm << " sleep: " << sleep_time;
 	}
 	catch (exception &e)
 	{

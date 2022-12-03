@@ -6,7 +6,7 @@
 
 MidiClockClient::MidiClockClient(const char *clientName, const char *dstName) : MidiClient(clientName, nullptr, dstName)
 {
-    run()
+    run();
 }
 
 void MidiClockClient::run()
@@ -18,7 +18,7 @@ void MidiClockClient::run()
 
     while (!stopped)
     {
-        for (k = 0; k < 96; k++)
+        for (int k = 0; k < 96; k++)
         {
             usleep((sleep_time * 1000000.0));
             send_event(&event);
