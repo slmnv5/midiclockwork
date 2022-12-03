@@ -19,9 +19,12 @@ public:
         this->sleep_time = sleep_time;
     }
 
-    void send_external(unsigned byte msg)
+    void send_external(unsigned byte msg_type )
     {
-        this->sleep_time = sleep_time;
+        snd_seq_event_t *event;
+        snd_seq_ev_clear(event);
+        event->type = msg_type;
+        send_event(event);
     }
 
 private:

@@ -12,6 +12,8 @@ int main(int argc, char *argv[])
 
 	const char *clientName = nullptr;
 	const char *dstName = nullptr;
+	const char *bpm = nullptr;
+
 	LOG::ReportingLevel() = LogLvl::ERROR;
 
 	for (int i = 1; i < argc; i++)
@@ -23,6 +25,10 @@ int main(int argc, char *argv[])
 		else if (strcmp(argv[i], "-d") == 0 && i + 1 < argc)
 		{
 			dstName = argv[i + 1];
+		}
+		else if (strcmp(argv[i], "-b") == 0 && i + 1 < argc)
+		{
+			bpm = argv[i + 1];
 		}
 		else if (strcmp(argv[i], "-v") == 0)
 		{
@@ -53,6 +59,9 @@ int main(int argc, char *argv[])
 	{
 
 		midiClockClient = new MidiClockClient(clientName, dstName);
+		float fbpm = atof(bpm);
+		float sleep_time = 60 / fbpm / 96;
+		midiClockClient->set_sleep(sleep_time);
 		LOG(LogLvl::INFO) << "Using typing MIDI clock destination: " << dstName;
 		LOG(LogLvl::INFO) << "Starting MIDI clock sending";
 	}
