@@ -59,7 +59,10 @@ int main(int argc, char *argv[])
 	{
 
 		midiClockClient = new MidiClockClient(clientName, dstName);
-		float fbpm = atof(bpm);
+		float fbpm = std::stof(std::string(bpm));
+		fbpm = max(fbpm, 20.0F);
+		fbpm = min(fbpm, 1200.0F);
+
 		float sleep_time = 60 / fbpm / 96;
 		midiClockClient->set_sleep(sleep_time);
 
