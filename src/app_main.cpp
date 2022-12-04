@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 
 	const char *clientName = nullptr;
 	const char *dstName = nullptr;
-	const char *bpm = nullptr;
+	const char *bar_time = nullptr;
 
 	LOG::ReportingLevel() = LogLvl::ERROR;
 
@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 		}
 		else if (strcmp(argv[i], "-b") == 0 && i + 1 < argc)
 		{
-			bpm = argv[i + 1];
+			bar_time = argv[i + 1];
 		}
 		else if (strcmp(argv[i], "-v") == 0)
 		{
@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
 	}
 
 	if (clientName == nullptr)
-		clientName = "miclock";
+		clientName = "pimidiclock";
 
 	LOG(LogLvl::INFO) << "MIDI clock client name: " << clientName;
 	MidiClockClient *mcc = nullptr;
@@ -59,13 +59,13 @@ int main(int argc, char *argv[])
 	{
 
 		mcc = new MidiClockClient(clientName, dstName);
-		float fbpm = std::stof(std::string(bpm));
-		fbpm = max(fbpm, 20.0F);
-		fbpm = min(fbpm, 1200.0F);
-		mcc->set_bar_time(11.222);
+		float fbt = std::stof(std::string(bar_time));
+		fbt = max(fbt, 0.5F);
+		fbt = min(fbt, 60.0F);
+		mcc->set_bar_time(fbt);
 
 		LOG(LogLvl::INFO) << "Using MIDI clock destination: " << dstName;
-		LOG(LogLvl::INFO) << "Starting MIDI clock sending BPM: " << bpm << " and sleep time: " << mcc->get_bar_time();
+		LOG(LogLvl::INFO) << "Starting MIDI clock, bar time: " << mcc->get_bar_time() << " BPM: " << mcc->get_bpm();
 		mcc->start();
 		mcc->run();
 	}
@@ -75,6 +75,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 	LOG(LogLvl::INFO) << "Completed app.";
+	mcc->stop();
 }
 
 void help()

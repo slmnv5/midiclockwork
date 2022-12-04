@@ -9,10 +9,19 @@ private:
     float bar_time = 2.0; // time for 1 bar is 2 seconds
     bool stopped = false;
     bool ended = false;
+    snd_seq_event_t event_clock;
+    snd_seq_event_t event_start;
+    snd_seq_event_t event_stop;
 
 public:
     MidiClockClient(const char *clientName, const char *dstName) : MidiClient(clientName, nullptr, dstName)
     {
+        snd_seq_ev_clear(&event_clock);
+        snd_seq_ev_clear(&event_start);
+        snd_seq_ev_clear(&event_stop);
+        event_clock.type = SND_SEQ_EVENT_CLOCK;
+        event_start.type = SND_SEQ_EVENT_START;
+        event_stop.type = SND_SEQ_EVENT_STOP;
     }
     virtual ~MidiClockClient()
     {
@@ -25,27 +34,21 @@ public:
     {
         return this->bar_time;
     }
-
-    void send_msg(unsigned char msg_type)
+    float get_bpm() const
     {
-        snd_seq_event_t event;
-        snd_seq_ev_clear(&event);
-        event.type = msg_type;
-        send_event(&event);
+        return 60 / this->bar_time * 4;
     }
-
     void start()
     {
         stopped = false;
-        unsigned char msg = stopped ? 0xFC : 0xFA;
-        this->send_msg(msg);
+        snd_seq_event ev = stopped ? event_stop : event_start;
+        this->send_event(&ev);
     }
-
     void stop()
     {
         stopped = true;
-        unsigned char msg = stopped ? 0xFC : 0xFA;
-        this->send_msg(msg);
+        snd_seq_event ev = stopped ? event_stop : event_start;
+        this->send_event(&ev);
     }
     void end()
     {
