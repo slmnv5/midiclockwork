@@ -11,14 +11,22 @@ void MidiClient::subscribe(const char *name_part, bool is_input)
 		return;
 	}
 
-	int id,
-		port, result;
-	unsigned int capability = is_input ? SND_SEQ_PORT_CAP_READ | SND_SEQ_PORT_CAP_SUBS_READ : SND_SEQ_PORT_CAP_WRITE | SND_SEQ_PORT_CAP_SUBS_WRITE;
+	int id, port, result;
+	id = port = result = -1;
+	unsigned int cp_read, cp_write;
+	cp_read = SND_SEQ_PORT_CAP_READ | SND_SEQ_PORT_CAP_SUBS_READ;
+	cp_write = SND_SEQ_PORT_CAP_WRITE | SND_SEQ_PORT_CAP_SUBS_WRITE;
+	unsigned int capability = is_input ? cp_read : cp_write;
 	result = find_midi_client(name_part, capability, id, port);
-	std::string msg(name_part + is_input ? " input " : " output ");
 	if (result < 0)
 	{
 		throw std::runtime_error("Error finding source MIDI port: " + std::string(name_part));
+	}
+
+	result = is_input ? snd_seq_connect_from(seq_handle, inport, id, port) : snd_seq_connect_to(seq_handle, outport, id, port);
+	if (result < 0)
+	{
+		throw new std::runtime_error("Cannot connect to port: " + std::to_string(id) + ":" + std::to_string(port));
 	}
 	LOG(LogLvl::INFO) << "Connected to MIDI port: " << name_part << (is_input ? " input " : " output ") << id << ":" << port;
 }
@@ -54,7 +62,7 @@ int MidiClient::find_midi_client(const std::string &name_part, unsigned int capa
 				continue;
 			cli_id = snd_seq_port_info_get_client(pinfo);
 			cli_port = snd_seq_port_info_get_port(pinfo);
-			LOG(LogLvl::INFO) << "Found source: " << name_part << " -- " << cli_id << ":" << cli_port;
+			LOG(LogLvl::INFO) << "Found MIDI: " << name_part << " -- " << cli_id << ":" << cli_port;
 			return 0;
 		}
 	}
