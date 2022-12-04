@@ -2,10 +2,10 @@
 
 # prepare all
 aconnect -x
-killall -9 pimidiclock
+killall -9 pimidiclock_d
 sleep 1
 
 # start this app.
-./pimidiclock_d  -d Sshpadnew -b 121.55 -vvv
+./pimidiclock_d  -d Sshpadnew -b 120.00 -vvv
 
 
