@@ -36,9 +36,9 @@ void MidiClockClient::run()
                 sum += (diff);
                 sum2 += (diff * diff);
             }
-            int sdev = sqrt(sum2 / (96 - 1));
-            int aver = sum / 96;
-            LOG(LogLvl::DEBUG) << "Time in ms. aver: " << aver << " std.dev.:" << sdev;
+            auto sdev = sqrt(sum2 / (96 - 1)) * 96 / 1000;
+            auto aver = sum / 1000;
+            LOG(LogLvl::DEBUG) << "Time in sec. aver.: " << aver << " std.dev.:" << sdev;
         }
     }
     send_event(&event_stop);
