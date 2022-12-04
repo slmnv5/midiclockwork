@@ -4,9 +4,11 @@
 
 void MidiClockClient::run()
 {
+    LOG(LogLvl::DEBUG) << "Start prepare clock event";
     snd_seq_event_t event;
     snd_seq_ev_clear(&event);
     event.type = SND_SEQ_EVENT_CLOCK;
+    LOG(LogLvl::DEBUG) << "Prepared clock event";
     while (!ended)
     {
         LOG(LogLvl::DEBUG) << "Wait to start MIDI clock for 2 sec.";
@@ -16,7 +18,7 @@ void MidiClockClient::run()
             LOG(LogLvl::DEBUG) << "Sent one bar of MIDI clock";
             for (int k = 0; k < 96; k++)
             {
-                usleep((sleep_time * 1000000.0));
+                usleep(sleep_time * 1000000.0);
                 send_event(&event);
             }
         }
