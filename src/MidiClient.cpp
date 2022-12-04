@@ -1,6 +1,5 @@
 #include "pch.hpp"
 #include "MidiClient.hpp"
-#include "utils.hpp"
 #include <fcntl.h>
 #include <linux/input.h>
 

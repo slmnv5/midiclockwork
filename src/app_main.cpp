@@ -1,5 +1,4 @@
 #include "pch.hpp"
-#include "utils.hpp"
 #include "MidiClient.hpp"
 #include "MidiClockClient.hpp"
 
