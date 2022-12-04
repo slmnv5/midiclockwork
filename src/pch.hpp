@@ -11,6 +11,6 @@
 #include <thread>
 #include <stdexcept>
 #include <map>
-#include "log.hpp"
+#include "lib/log.hpp"
 
 #endif

@@ -4,7 +4,7 @@
 
 void MidiClockClient::run()
 {
-    LOG(LogLvl::DEBUG) << "Start prepare clock event";
+    LOG(LogLvl::DEBUG) << "Start prepare clock event, type: " << SND_SEQ_EVENT_CLOCK;
     snd_seq_event_t event;
     snd_seq_ev_clear(&event);
     event.type = SND_SEQ_EVENT_CLOCK;

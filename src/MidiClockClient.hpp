@@ -7,7 +7,7 @@ class MidiClockClient : public MidiClient
 {
 private:
     float sleep_time = 2.0 / 96; // bar is 2 seconds
-    bool stopped = true;
+    bool stopped = false;
     bool ended = false;
 
 public:
@@ -28,10 +28,10 @@ public:
 
     void send_msg(unsigned char msg_type)
     {
-        snd_seq_event_t *event;
-        snd_seq_ev_clear(event);
-        event->type = msg_type;
-        send_event(event);
+        snd_seq_event_t event;
+        snd_seq_ev_clear(&event);
+        event.type = msg_type;
+        send_event(&event);
     }
 
     void start()

@@ -1,10 +1,11 @@
 // custom main() and we need this in 1-st line:
 #define CATCH_CONFIG_RUNNER
 
-#include "catch.hpp"
-#include "log.hpp"
+#include "lib/catch.hpp"
+#include "lib/log.hpp"
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
 	LOG::ReportingLevel() = LogLvl::DEBUG;
 
 	int result = Catch::Session().run(argc, argv);
@@ -17,4 +18,3 @@ int main(int argc, char *argv[]) {
 // g++ -c test_main.cpp
 // g++ -o test_exe test_main.o test_1.cpp
 // run as: ./test_exe --success
-
