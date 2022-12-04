@@ -88,11 +88,8 @@ void MidiClient::open_alsa_connections(const char *clientName, const char *srcNa
 	LOG(LogLvl::INFO) << "MIDI ports created: IN=" << client << ":" << inport << " OUT="
 					  << client << ":" << outport;
 
-	cout << 122222222222;
 	subscribe(srcName, true);
-	cout << 3333322222222222;
 	subscribe(dstName, false);
-	cout << 55555522222222222;
 }
 
 void MidiClient::send_event(snd_seq_event_t *event) const

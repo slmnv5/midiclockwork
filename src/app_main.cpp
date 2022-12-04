@@ -53,28 +53,26 @@ int main(int argc, char *argv[])
 		clientName = "miclock";
 
 	LOG(LogLvl::INFO) << "MIDI clock client name: " << clientName;
-	MidiClockClient *midiClockClient = nullptr;
+	MidiClockClient *mcc = nullptr;
 
 	try
 	{
 
-		midiClockClient = new MidiClockClient(clientName, dstName);
-		cout << 333333333 << bpm;
+		mcc = new MidiClockClient(clientName, dstName);
 		float fbpm = std::stof(std::string(bpm));
-		cout << 333333333 << 555555555;
 		fbpm = max(fbpm, 20.0F);
 		fbpm = min(fbpm, 1200.0F);
-		cout << 11111111111111111 << fbpm;
-		midiClockClient->set_sleep(11.222);
+		mcc->set_sleep(11.222);
 
-		LOG(LogLvl::INFO) << "Using typing MIDI clock destination: " << dstName;
-		LOG(LogLvl::INFO) << "Starting MIDI clock sending BPM: " << bpm;
+		LOG(LogLvl::INFO) << "Using MIDI clock destination: " << dstName;
+		LOG(LogLvl::INFO) << "Starting MIDI clock sending BPM: " << bpm << " and sleep time: " << sleep << mcc->get_sleep();
 	}
 	catch (exception &e)
 	{
 		LOG(LogLvl::ERROR) << "Completed with error: " << e.what();
 		return 1;
 	}
+	LOG(LogLvl::INFO) << "Completed app.";
 }
 
 void help()
