@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
 		mcc->set_sleep(11.222);
 
 		LOG(LogLvl::INFO) << "Using MIDI clock destination: " << dstName;
-		LOG(LogLvl::INFO) << "Starting MIDI clock sending BPM: " << bpm << " and sleep time: " << sleep << mcc->get_sleep();
+		LOG(LogLvl::INFO) << "Starting MIDI clock sending BPM: " << bpm << " and sleep time: " << mcc->get_sleep();
 	}
 	catch (exception &e)
 	{
