@@ -47,10 +47,10 @@ public:
         unsigned char msg = stopped ? 0xFC : 0xFA;
         this->send_msg(msg);
     }
-
     void end()
     {
         ended = true;
+        stop();
     }
     void run();
 };

@@ -10,10 +10,11 @@ void MidiClockClient::run()
     event.data.note.channel = 0;
     while (!ended)
     {
-        LOG(LogLvl::DEBUG) << "Wait to start MIDI clock";
+        LOG(LogLvl::DEBUG) << "Wait to start MIDI clock for 2 sec.";
         usleep(2000000);
         while (!stopped)
         {
+            LOG(LogLvl::DEBUG) << "Sent one bar of MIDI clock";
             for (int k = 0; k < 96; k++)
             {
                 usleep((sleep_time * 1000000.0));
@@ -21,4 +22,5 @@ void MidiClockClient::run()
             }
         }
     }
+    send_msg(0xFC);
 }
