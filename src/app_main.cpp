@@ -62,10 +62,10 @@ int main(int argc, char *argv[])
 		float fbpm = std::stof(std::string(bpm));
 		fbpm = max(fbpm, 20.0F);
 		fbpm = min(fbpm, 1200.0F);
-		mcc->set_sleep(11.222);
+		mcc->set_bar_time(11.222);
 
 		LOG(LogLvl::INFO) << "Using MIDI clock destination: " << dstName;
-		LOG(LogLvl::INFO) << "Starting MIDI clock sending BPM: " << bpm << " and sleep time: " << mcc->get_sleep();
+		LOG(LogLvl::INFO) << "Starting MIDI clock sending BPM: " << bpm << " and sleep time: " << mcc->get_bar_time();
 		mcc->start();
 		mcc->run();
 	}

@@ -6,7 +6,7 @@
 class MidiClockClient : public MidiClient
 {
 private:
-    float sleep_time = 2.0 / 96; // bar is 2 seconds
+    float bar_time = 2.0; // time for 1 bar is 2 seconds
     bool stopped = false;
     bool ended = false;
 
@@ -17,13 +17,13 @@ public:
     virtual ~MidiClockClient()
     {
     }
-    void set_sleep(float sleep_time)
+    void set_bar_time(float bar_time)
     {
-        this->sleep_time = sleep_time;
+        this->bar_time = bar_time;
     }
-    float get_sleep() const
+    float get_bar_time() const
     {
-        return this->sleep_time;
+        return this->bar_time;
     }
 
     void send_msg(unsigned char msg_type)

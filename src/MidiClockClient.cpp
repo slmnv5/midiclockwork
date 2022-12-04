@@ -8,7 +8,8 @@ void MidiClockClient::run()
     snd_seq_event_t event;
     snd_seq_ev_clear(&event);
     event.type = SND_SEQ_EVENT_CLOCK;
-    LOG(LogLvl::DEBUG) << "Prepared clock event";
+    float sleep_time = bar_time / 96;
+    LOG(LogLvl::DEBUG) << "Prepared clock event, sleep time: " << sleep_time;
     while (!ended)
     {
         LOG(LogLvl::DEBUG) << "Wait to start MIDI clock for 2 sec.";
