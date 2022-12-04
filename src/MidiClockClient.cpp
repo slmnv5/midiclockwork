@@ -9,6 +9,7 @@ void MidiClockClient::run()
     LOG(LogLvl::DEBUG) << "Prepared clock event, sleep time: " << sleep_time;
     while (!ended)
     {
+        send_event(&event_start);
         LOG(LogLvl::DEBUG) << "Wait to start MIDI clock for 2 sec.";
         usleep(2000000);
         while (!stopped)
