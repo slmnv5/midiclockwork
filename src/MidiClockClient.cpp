@@ -37,8 +37,9 @@ void MidiClockClient::run()
             auto aver = sum / 96;
             auto aver2 = sum2 / 96;
             auto stdev = sqrt(aver2 - aver * aver);
-            LOG(LogLvl::DEBUG) << "Average time per MIDI clock, seconds: " << aver
-                               << " std. deviation, seconds: " << stdev;
+            LOG(LogLvl::DEBUG) << "Average: " << aver
+                               << " std. dev: " << stdev
+                               << " variability ratio: " << aver / stdev;
         }
     }
     send_event(&event_stop);
