@@ -49,20 +49,24 @@ int main(int argc, char *argv[])
 	}
 
 	if (clientName == nullptr)
+	{
 		clientName = "pimidiclock";
-
+	}
+	if (bar_time == nullptr)
+	{
+		help(argv[0]);
+		return 1;
+	}
 	LOG(LogLvl::INFO) << "MIDI clock client name: " << clientName;
 	MidiClockClient *mcc = nullptr;
 
 	try
 	{
-
 		mcc = new MidiClockClient(clientName, dstName);
 		float fbt = std::stof(std::string(bar_time));
 		fbt = max(fbt, 0.05F);
 		fbt = min(fbt, 10000.0F);
 		mcc->set_bar_time(fbt);
-
 		LOG(LogLvl::INFO) << "Starting MIDI clock, bar time: " << mcc->get_bar_time()
 						  << ",  BPM: " << mcc->get_bpm();
 		mcc->start();
@@ -71,6 +75,7 @@ int main(int argc, char *argv[])
 	catch (exception &e)
 	{
 		LOG(LogLvl::ERROR) << "Completed with error: " << e.what();
+		help(argv[0]);
 		return 1;
 	}
 	LOG(LogLvl::INFO) << "Completed app.";
@@ -79,7 +84,7 @@ int main(int argc, char *argv[])
 
 void help(std::string app_name)
 {
-	cout << "Usage: " << app_name << " -b <bar_length_sec> [options] \n"
+	cout << "\nUsage: " << app_name << " -b <bar_length_seconds> [options]\n"
 		 << "  -n [name] name of created MIDI port, optional\n"
 		 << "  -d [dstName] destination port to connect, optional\n"
 		 << "  -v verbose output\n"

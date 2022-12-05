@@ -39,7 +39,7 @@ void MidiClockClient::run()
             auto stdev = sqrt(aver2 - aver * aver);
             LOG(LogLvl::DEBUG) << "Average: " << aver
                                << " std. dev: " << stdev
-                               << " variability ratio: " << aver / stdev;
+                               << " variability ratio: " << stdev / aver;
         }
     }
     send_event(&event_stop);
