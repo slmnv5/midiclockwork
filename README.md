@@ -1,5 +1,5 @@
 # pimidiclock
-## Send MIDI clock from raspberry Pi, measure jitter and delay
+## Send MIDI clock from Linux, measure jitter and delay
 
 Send MIDI clock with specified frequency (given as seconds per bar) and measure average and standard deviation of time between messages. Use it to test MIDI clock jitter and delay on your Linux system or as a prototype for MIDI clock generator.
 
