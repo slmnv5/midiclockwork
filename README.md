@@ -6,6 +6,8 @@ Send MIDI clock with specified frequency (given as seconds per bar) and measure 
 This application creates input and output MIDI ports with given name, optionally connects to some other MIDI port to send MIDI clock messages.
 Then it starts generating MIDI clock messages for given bar length in seconds (BPM is displayed on screen). It measures and displays actual time intervals, report average, standard deviation and their ratio for every bar. 
 
-Example:
 
-![Alt text](./Makefile "Title")
+
+![Alt text](./MIDI_demo.png  "Example")
+
+
