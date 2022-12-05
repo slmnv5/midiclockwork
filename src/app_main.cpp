@@ -4,7 +4,7 @@
 
 using namespace std;
 
-void help();
+void help(std::string app_name);
 
 int main(int argc, char *argv[])
 {
@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
 		}
 		else if (strcmp(argv[i], "-h") == 0)
 		{
-			help();
+			help(argv[0]);
 			return 0;
 		}
 	}
@@ -59,12 +59,12 @@ int main(int argc, char *argv[])
 
 		mcc = new MidiClockClient(clientName, dstName);
 		float fbt = std::stof(std::string(bar_time));
-		fbt = max(fbt, 0.5F);
-		fbt = min(fbt, 60.0F);
+		fbt = max(fbt, 0.05F);
+		fbt = min(fbt, 10000.0F);
 		mcc->set_bar_time(fbt);
 
-		LOG(LogLvl::INFO) << "Using MIDI clock destination: " << dstName;
-		LOG(LogLvl::INFO) << "Starting MIDI clock, bar time: " << mcc->get_bar_time() << " BPM: " << mcc->get_bpm();
+		LOG(LogLvl::INFO) << "Starting MIDI clock, bar time: " << mcc->get_bar_time()
+						  << ",  BPM: " << mcc->get_bpm();
 		mcc->start();
 		mcc->run();
 	}
@@ -77,13 +77,13 @@ int main(int argc, char *argv[])
 	mcc->stop();
 }
 
-void help()
+void help(std::string app_name)
 {
-	cout << "Usage: mimap5 -r <file> [options] \n"
-			"  -d <dstName> MIDI port to connect and send clock\n"
-			"  -n [name] name of my MIDI port\n"
-			"  -v verbose output\n"
-			"  -vv more verbose\n"
-			"  -vvv even more verbose\n"
-			"  -h displays this info\n";
+	cout << "Usage: " << app_name << " -b <bar_length_sec> [options] \n"
+		 << "  -n [name] name of created MIDI port, optional\n"
+		 << "  -d [dstName] destination port to connect, optional\n"
+		 << "  -v verbose output\n"
+		 << "  -vv more verbose\n"
+		 << "  -vvv even more verbose\n"
+		 << "  -h displays this info\n";
 }

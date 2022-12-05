@@ -28,7 +28,7 @@ public:
     }
     void set_bar_time(float bar_time)
     {
-        this->bar_time = bar_time;
+        this->bar_time = abs(bar_time);
     }
     float get_bar_time() const
     {

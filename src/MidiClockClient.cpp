@@ -7,22 +7,19 @@
 
 void MidiClockClient::run()
 {
-    LOG(LogLvl::DEBUG) << "Start prepare clock event, type: " << SND_SEQ_EVENT_CLOCK;
     float sleep_time = bar_time / 96;
-    LOG(LogLvl::DEBUG) << "Prepared clock event, sleep time: " << sleep_time;
-
-    long miliseconds = sleep_time * 1000;
+    LOG(LogLvl::DEBUG) << "Prepared clock event, clock sleep time, seconds: " << sleep_time;
+    long int miliseconds = sleep_time * 1000;
     struct timespec req = {
-        (int)(miliseconds / 1000),     /* secs (Must be Non-Negative) */
+        int(sleep_time),               /* secs (Must be Non-Negative) */
         (miliseconds % 1000) * 1000000 /* nano (Must be in range of 0 to 999999999) */
     };
     while (!ended)
     {
         send_event(&event_start);
-        LOG(LogLvl::DEBUG) << "Wait to start MIDI clock for 2 sec.";
-
+        LOG(LogLvl::DEBUG) << "MIDI clock running: " << !stopped;
         auto begin = std::chrono::steady_clock::now();
-        long sum, sum2;
+        double sum, sum2;
         while (!stopped)
         {
             sum = sum2 = 0;
@@ -31,14 +28,17 @@ void MidiClockClient::run()
                 nanosleep(&req, nullptr);
                 send_event(&event_clock);
                 auto end = std::chrono::steady_clock::now();
-                auto diff = (end - begin).count();
+                std::chrono::duration<double> diff = end - begin;
                 begin = end;
-                sum += (diff);
-                sum2 += (diff * diff);
+                auto secs = diff.count();
+                sum += (secs);
+                sum2 += (secs * secs);
             }
-            auto sdev = sqrt(sum2 / (96 - 1)) * 96 / 1000;
-            auto aver = sum / 1000;
-            LOG(LogLvl::DEBUG) << "Time in sec. aver.: " << aver << " std.dev.:" << sdev;
+            auto aver = sum / 96;
+            auto aver2 = sum2 / 96;
+            auto stdev = sqrt(aver2 - aver * aver);
+            LOG(LogLvl::DEBUG) << "Average time per MIDI clock, seconds: " << aver
+                               << " std. deviation, seconds: " << stdev;
         }
     }
     send_event(&event_stop);
