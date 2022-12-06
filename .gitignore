@@ -1,6 +1,7 @@
-pimidiclock
-pimidiclock_d
-pimidiclock_t
+# make file output
+app
+app_t
+app_d
 
 # Prerequisites
 *.d
