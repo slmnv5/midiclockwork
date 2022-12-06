@@ -25,7 +25,7 @@ void MidiClient::subscribe(const char *name_part, bool is_input)
 	result = is_input ? snd_seq_connect_from(seq_handle, inport, id, port) : snd_seq_connect_to(seq_handle, outport, id, port);
 	if (result < 0)
 	{
-		throw new std::runtime_error("Cannot connect to port: " + std::to_string(id) + ":" + std::to_string(port));
+		throw std::runtime_error("Cannot connect to port: " + std::to_string(id) + ":" + std::to_string(port));
 	}
 	LOG(LogLvl::INFO) << "Connected to MIDI port: " << name_part << (is_input ? " input " : " output ") << id << ":" << port;
 }

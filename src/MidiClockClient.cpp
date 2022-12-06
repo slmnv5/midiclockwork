@@ -37,9 +37,9 @@ void MidiClockClient::run()
             auto aver = sum / 96;
             auto aver2 = sum2 / 96;
             auto stdev = sqrt(aver2 - aver * aver);
-            LOG(LogLvl::DEBUG) << "Average: " << aver
-                               << " std. dev: " << stdev
-                               << " variability ratio: " << stdev / aver;
+            LOG(LogLvl::DEBUG) << "\taverage delay (ms): " << (aver - sleep_time) * 1000
+                               << "\tstd. dev (ms): " << stdev * 1000
+                               << "\tratio (%): " << (stdev / sleep_time * 100);
         }
     }
     send_event(&event_stop);
