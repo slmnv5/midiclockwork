@@ -6,7 +6,7 @@
 class MidiClockClient : public MidiClient
 {
 private:
-    float bar_time = 2.0; // time for 1 bar is 2 seconds
+    double bar_time = 2.0; // time for 1 bar is 2 seconds
     bool stopped = false;
     bool ended = false;
     snd_seq_event_t event_clock;
