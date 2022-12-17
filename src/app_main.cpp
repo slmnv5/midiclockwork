@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
 		fbt = min(fbt, 10000.0F);
 		mcc->setBarTime(fbt);
 		LOG(LogLvl::INFO) << "Starting MIDI clock, bar time: " << mcc->getBarTime()
-						  << ",  BPM: " << mcc->getBpm();
+						  << ",  BPM: " << mcc->getBpm() << " exact time: " << exactTime;
 		mcc->run(exactTime);
 	}
 	catch (exception &e)
