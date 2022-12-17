@@ -6,54 +6,55 @@
 class MidiClockClient : public MidiClient
 {
 private:
-    double bar_time = 2.0; // time for 1 bar is 2 seconds
-    bool stopped = false;
-    bool ended = false;
-    snd_seq_event_t event_clock;
-    snd_seq_event_t event_start;
-    snd_seq_event_t event_stop;
+    double mBarSeconds = 2.0; // time for 1 bar is 2 seconds
+    bool mStopped = false;
+    bool mEnded = false;
+    snd_seq_event_t mEvClock;
+    snd_seq_event_t mEvStart;
+    snd_seq_event_t mEvStop;
 
 public:
     MidiClockClient(const char *clientName, const char *dstName) : MidiClient(clientName, nullptr, dstName)
     {
-        snd_seq_ev_clear(&event_clock);
-        snd_seq_ev_clear(&event_start);
-        snd_seq_ev_clear(&event_stop);
-        event_clock.type = SND_SEQ_EVENT_CLOCK;
-        event_start.type = SND_SEQ_EVENT_START;
-        event_stop.type = SND_SEQ_EVENT_STOP;
+        snd_seq_ev_clear(&mEvClock);
+        snd_seq_ev_clear(&mEvStart);
+        snd_seq_ev_clear(&mEvStop);
+        mEvClock.type = SND_SEQ_EVENT_CLOCK;
+        mEvStart.type = SND_SEQ_EVENT_START;
+        mEvStop.type = SND_SEQ_EVENT_STOP;
     }
     virtual ~MidiClockClient()
     {
     }
-    void set_bar_time(float bar_time)
+    int sleep(bool exactTime, uint sleepMicro);
+    void setBarTime(float bar_time)
     {
-        this->bar_time = abs(bar_time);
+        this->mBarSeconds = abs(bar_time);
     }
-    float get_bar_time() const
+    float getBarTime() const
     {
-        return this->bar_time;
+        return this->mBarSeconds;
     }
-    float get_bpm() const
+    float getBpm() const
     {
-        return 60 / this->bar_time * 4;
+        return 60 / this->mBarSeconds * 4;
     }
     void start()
     {
-        stopped = false;
-        this->send_event(&event_start);
+        mStopped = false;
+        this->send_event(&mEvStart);
     }
     void stop()
     {
-        stopped = true;
-        this->send_event(&event_stop);
+        mStopped = true;
+        this->send_event(&mEvStop);
     }
     void end()
     {
-        ended = true;
+        mEnded = true;
         stop();
     }
-    void run();
+    void run(bool exact);
 };
 
 #endif

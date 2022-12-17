@@ -13,6 +13,7 @@ int main(int argc, char *argv[])
 	const char *clientName = nullptr;
 	const char *dstName = nullptr;
 	const char *bar_time = nullptr;
+	bool exactTime = false;
 
 	LOG::ReportingLevel() = LogLvl::ERROR;
 
@@ -29,6 +30,10 @@ int main(int argc, char *argv[])
 		else if (strcmp(argv[i], "-b") == 0 && i + 1 < argc)
 		{
 			bar_time = argv[i + 1];
+		}
+		else if (strcmp(argv[i], "-e") == 0 && i + 1 < argc)
+		{
+			exactTime = true;
 		}
 		else if (strcmp(argv[i], "-v") == 0)
 		{
@@ -67,10 +72,10 @@ int main(int argc, char *argv[])
 		float fbt = std::stof(std::string(bar_time));
 		fbt = max(fbt, 0.05F);
 		fbt = min(fbt, 10000.0F);
-		mcc->set_bar_time(fbt);
-		LOG(LogLvl::INFO) << "Starting MIDI clock, bar time: " << mcc->get_bar_time()
-						  << ",  BPM: " << mcc->get_bpm();
-		mcc->run();
+		mcc->setBarTime(fbt);
+		LOG(LogLvl::INFO) << "Starting MIDI clock, bar time: " << mcc->getBarTime()
+						  << ",  BPM: " << mcc->getBpm();
+		mcc->run(exactTime);
 	}
 	catch (exception &e)
 	{

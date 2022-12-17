@@ -5,32 +5,42 @@
 using myclock = std::chrono::steady_clock;
 using seconds = std::chrono::duration<double>;
 
-void MidiClockClient::run()
+int MidiClockClient::sleep(bool exactTime, uint sleepMicro)
 {
-    double sleep_time = bar_time / 96;
-    unsigned int sleep_time_s = std::floor(sleep_time);
-    unsigned int sleep_time_ns = (sleep_time - sleep_time_s) * 1.0E9;
-    struct timespec sleep = {
-        sleep_time_s, /* secs (Must be Non-Negative) */
-        sleep_time_ns /* nano (Must be in range of 0 to 999,999,999) */
-    };
-
-    LOG(LogLvl::DEBUG) << "Prepared clock event, clock sleep time (ms): " << sleep_time * 1000;
-
-    while (!ended)
+    if (!exactTime)
     {
-        send_event(&event_start);
-        LOG(LogLvl::DEBUG) << "MIDI clock running: " << !stopped;
+        return usleep(sleepMicro);
+    }
+    else
+    {
+        auto stopAt = myclock::now() + std::chrono::microseconds(sleepMicro);
+        int result = usleep(sleepMicro * 0.95);
+        while (myclock::now() < stopAt)
+            ;
+        return result;
+    }
+}
+
+void MidiClockClient::run(bool exactTime)
+{
+    double sleepSec = mBarSeconds / 96;
+    uint sleepMicro = sleepSec * 1.0E6;
+    LOG(LogLvl::DEBUG) << "Prepared clock event, clock sleep time (ms): " << sleepSec * 1.0E3;
+
+    while (!mEnded)
+    {
+        send_event(&mEvStart);
+        LOG(LogLvl::DEBUG) << "MIDI clock running: " << !mStopped;
         auto begin = myclock::now();
         double sum, max, min;
-        while (!stopped)
+        while (!mStopped)
         {
             sum = max = 0;
-            min = 99999999999999;
+            min = 1.0E6;
             for (int k = 0; k < 96; k++)
             {
-                nanosleep(&sleep, &sleep);
-                send_event(&event_clock);
+                this->sleep(exactTime, sleepMicro);
+                send_event(&mEvClock);
                 auto end = myclock::now();
                 seconds diff = end - begin;
                 begin = end;
@@ -41,9 +51,9 @@ void MidiClockClient::run()
             }
             auto aver = sum / 96;
             LOG(LogLvl::DEBUG) << std::fixed << std::setprecision(3)
-                               << "\taver. error (ms): " << (aver - sleep_time) * 1000
+                               << "\taver. error (ms): " << (aver - sleepSec) * 1000
                                << "\tspread (ms): " << (max - min) * 1000;
         }
     }
-    send_event(&event_stop);
+    send_event(&mEvStop);
 }
