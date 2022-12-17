@@ -18,10 +18,11 @@ void MidiClockClient::run()
         send_event(&event_start);
         LOG(LogLvl::DEBUG) << "MIDI clock running: " << !stopped;
         auto begin = std::chrono::steady_clock::now();
-        double sum, sum2, max;
+        double sum, sum2, max, min;
         while (!stopped)
         {
             sum = sum2 = max = 0;
+            min = 99999999999999;
             for (int k = 0; k < 96; k++)
             {
                 usleep(sleep_time_us);
@@ -31,6 +32,7 @@ void MidiClockClient::run()
                 begin = end;
                 auto secs = diff.count();
                 max = std::max(max, abs(secs));
+                min = std::min(min, abs(secs));
                 sum += (secs);
                 sum2 += (secs * secs);
             }
@@ -40,8 +42,7 @@ void MidiClockClient::run()
             LOG(LogLvl::DEBUG) << std::fixed << std::setprecision(3)
                                << "\taver. error (ms): " << (aver - sleep_time) * 1000
                                << "\tstd. dev (ms): " << stdev * 1000
-                               << "\tmax (ms): " << max * 1000
-                               << "\trel. error (%): " << (stdev / sleep_time * 100);
+                               << "\tspread (ms): " << (max - min) * 1000;
         }
     }
     send_event(&event_stop);
