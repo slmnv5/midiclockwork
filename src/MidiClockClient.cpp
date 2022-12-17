@@ -13,12 +13,12 @@ int MidiClockClient::sleep(bool exactTime, uint sleepMicro)
     }
     else
     {
-        auto stopAt = std::chrono::high_resolution_clock::now() + std::chrono::microseconds(sleepMicro);
+        auto stopAt = myclock::now() + std::chrono::microseconds(sleepMicro);
         int result = usleep(sleepMicro * 0.92);
         do
         {
             std::this_thread::yield();
-        } while (std::chrono::high_resolution_clock::now() < stopAt);
+        } while (myclock::now() < stopAt);
 
         return result;
     }
