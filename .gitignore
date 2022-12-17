@@ -1,7 +1,5 @@
 # make file output
 app
-app_t
-app_d
 pimidiclock
 pimidiclock.so
 
