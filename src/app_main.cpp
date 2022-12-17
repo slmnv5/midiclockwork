@@ -1,6 +1,7 @@
 #include "pch.hpp"
 #include "MidiClient.hpp"
 #include "MidiClockClient.hpp"
+#include "lib/log.hpp"
 
 using namespace std;
 

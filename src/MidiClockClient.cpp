@@ -1,10 +1,9 @@
 #include "pch.hpp"
+#include "lib/log.hpp"
 #include "MidiClockClient.hpp"
-#include <stdio.h>
-#include <time.h>
-#include <math.h>
-#include <iomanip>
-#include <chrono>
+
+using myclock = std::chrono::steady_clock;
+using seconds = std::chrono::duration<double>;
 
 void MidiClockClient::run()
 {
@@ -17,31 +16,27 @@ void MidiClockClient::run()
     {
         send_event(&event_start);
         LOG(LogLvl::DEBUG) << "MIDI clock running: " << !stopped;
-        auto begin = std::chrono::steady_clock::now();
-        double sum, sum2, max, min;
+        auto begin = myclock::now();
+        double sum, max, min;
         while (!stopped)
         {
-            sum = sum2 = max = 0;
+            sum = max = 0;
             min = 99999999999999;
             for (int k = 0; k < 96; k++)
             {
                 usleep(sleep_time_us);
                 send_event(&event_clock);
-                auto end = std::chrono::steady_clock::now();
-                std::chrono::duration<double> diff = end - begin;
+                auto end = myclock::now();
+                seconds diff = end - begin;
                 begin = end;
                 auto secs = diff.count();
                 max = std::max(max, abs(secs));
                 min = std::min(min, abs(secs));
                 sum += (secs);
-                sum2 += (secs * secs);
             }
             auto aver = sum / 96;
-            auto aver2 = sum2 / 96;
-            auto stdev = sqrt(aver2 - aver * aver);
             LOG(LogLvl::DEBUG) << std::fixed << std::setprecision(3)
                                << "\taver. error (ms): " << (aver - sleep_time) * 1000
-                               << "\tstd. dev (ms): " << stdev * 1000
                                << "\tspread (ms): " << (max - min) * 1000;
         }
     }
