@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 		{
 			bar_time = argv[i + 1];
 		}
-		else if (strcmp(argv[i], "-e") == 0 && i + 1 < argc)
+		else if (strcmp(argv[i], "-e") == 0)
 		{
 			exactTime = true;
 		}
