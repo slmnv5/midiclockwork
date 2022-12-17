@@ -41,14 +41,12 @@ public:
     void start()
     {
         stopped = false;
-        snd_seq_event ev = stopped ? event_stop : event_start;
-        this->send_event(&ev);
+        this->send_event(&event_start);
     }
     void stop()
     {
         stopped = true;
-        snd_seq_event ev = stopped ? event_stop : event_start;
-        this->send_event(&ev);
+        this->send_event(&event_stop);
     }
     void end()
     {
