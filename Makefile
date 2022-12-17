@@ -12,24 +12,21 @@ DEPENDS := $(shell find . -name "*.d")
 LDFLAGS := -pthread -lasound
 CPPFLAGS := -I$(SRC_DIR) -MMD -MP
 CXXFLAGS := -std=c++11 -g -Wno-psabi -Wall
- 
-app_t: $(OBJ_TST)
-	@echo "build app test and run unit tests"
-	cd $(PROJECT_ROOT)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -o $@ $^  $(LDFLAGS)
-	./app_t
 
-app_d: $(OBJ_APP)
+lib: CXXFLAGS = -std=c++11 -O2 -Wall -fPIC
+lib: $(OBJ_APP)
 	cd $(PROJECT_ROOT)
-	@echo "build debug version"
+	@echo "build release version of shared lib"
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -o $@ $^  $(LDFLAGS)
+	mv -v lib pimidiclock.so
 	
 
 app: CXXFLAGS = -std=c++11 -O2 -Wall
 app: $(OBJ_APP)
-	@echo "Build release version"
+	@echo "Build release version of app"
 	cd $(PROJECT_ROOT)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -o $@ $^  $(LDFLAGS)
+	mv -v app pimidiclock
  
 $(SRC_DIR)/pch.hpp.gch: $(SRC_DIR)/pch.hpp
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -x c++-header -c $< -o $@
@@ -58,7 +55,8 @@ info:
 	@echo OBJ_TST -- $(OBJ_TST)
 	@echo DEPENDS -- ${DEPENDS}
 
- 
+
+
 
 
  
