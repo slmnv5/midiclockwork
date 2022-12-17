@@ -7,10 +7,15 @@ using seconds = std::chrono::duration<double>;
 
 void MidiClockClient::run()
 {
-    float sleep_time = bar_time / 96;
-    float sleep_time_ms = sleep_time * 1000;
-    float sleep_time_us = sleep_time * 1000000;
-    LOG(LogLvl::DEBUG) << "Prepared clock event, clock sleep time (ms): " << sleep_time_ms;
+    double sleep_time = bar_time / 96;
+    uint sleep_time_s = std::ceil(sleep_time);
+    uint sleep_time_ns = (sleep_time - sleep_time_s) * 10E9;
+    struct timespec sleep = {
+        sleep_time_s, /* secs (Must be Non-Negative) */
+        sleep_time_ns /* nano (Must be in range of 0 to 999,999,999) */
+    };
+
+    LOG(LogLvl::DEBUG) << "Prepared clock event, clock sleep time (ms): " << sleep_time * 1000;
 
     while (!ended)
     {
@@ -24,7 +29,7 @@ void MidiClockClient::run()
             min = 99999999999999;
             for (int k = 0; k < 96; k++)
             {
-                usleep(sleep_time_us);
+                nanosleep(&sleep, &sleep);
                 send_event(&event_clock);
                 auto end = myclock::now();
                 seconds diff = end - begin;

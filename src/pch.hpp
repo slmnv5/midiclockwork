@@ -11,6 +11,7 @@
 #include <thread>
 #include <stdexcept>
 #include <map>
+#include <cmath>
 #include <iomanip>
 #include <chrono>
 
