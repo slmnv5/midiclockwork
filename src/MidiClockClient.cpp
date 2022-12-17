@@ -8,7 +8,7 @@ using seconds = std::chrono::duration<double>;
 void MidiClockClient::run()
 {
     double sleep_time = bar_time / 96;
-    uint sleep_time_s = std::ceil(sleep_time);
+    uint sleep_time_s = std::floor(sleep_time);
     uint sleep_time_ns = (sleep_time - sleep_time_s) * 10E9;
     struct timespec sleep = {
         sleep_time_s, /* secs (Must be Non-Negative) */
