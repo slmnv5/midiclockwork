@@ -9,5 +9,15 @@ Application creates input and output MIDI ports, optionally connects to another 
 ![Sample output](demo.png)
 
 
+Usage: ./pimidiclock -s <seconds_per_bar> [options]
+  -b [busyPercent] percent of busy wait, optional
+  -n [name] name of created MIDI port, optional
+  -d [dstName] destination port to connect, optional
+  -v verbose output
+  -vv more verbose
+  -vvv even more verbose
+  -h displays this info
+
+
 
 
