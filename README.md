@@ -1,10 +1,12 @@
 # pimidiclock
 ## Send MIDI clock from Linux, measure jitter and delay
 
-Send MIDI clock with specified frequency (given as seconds per bar) and measure average and standard deviation of time between messages. Use it to test MIDI clock jitter and delay on your Linux system or as a prototype for MIDI clock generator.
+Send MIDI clock with specified frequency (given as seconds per bar) and measure average delay (actual-planned) and average spread (max-min) time between sent messages. This is used to test MIDI clock jitter and delay on Linux system.
+Busy wait is a way to increase precision of wait time, it may be used with a paramter. 
 
-This application creates input and output MIDI ports, optionally connects to another MIDI port to send clock signal.
-Then it generates messages for given bar length, BPM is shown on screen. It measures actual time intervals and reports average delay, standard deviation of interval and variablity ratio (SDEV/MEAN) for every 96 messages or for every bar.
+Application creates input and output MIDI ports, optionally connects to another MIDI port to send clock signal.
+
+![Sample output](demo.png)
 
 
 
