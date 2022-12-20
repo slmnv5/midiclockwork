@@ -80,8 +80,10 @@ int main(int argc, char *argv[])
 		double barSecondsDbl = std::stod(std::string(barSeconds));
 		mcc->setBarSeconds(barSecondsDbl);
 
-		LOG(LogLvl::INFO) << "Starting MIDI clock, bar time: " << mcc->getBarSeconds()
+		LOG(LogLvl::INFO) << "Starting MIDI clock, bar time seconds: " << mcc->getBarSeconds()
 						  << ",  BPM: " << mcc->getBpm() << " busy wait time %: " << mcc->getWaitBusyPct();
+
+		mcc->run();
 	}
 	catch (exception &e)
 	{

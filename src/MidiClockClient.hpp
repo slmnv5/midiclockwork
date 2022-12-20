@@ -8,7 +8,6 @@ class MidiClockClient : public MidiClient
 private:
     double mBarSeconds = 2.0; // time for 1 bar is 2 seconds
     bool mStopped = false;
-    bool mEnded = false;
     uint mBusyPct = 0;
     snd_seq_event_t mEvClock;
     snd_seq_event_t mEvStart;
@@ -27,6 +26,7 @@ public:
     virtual ~MidiClockClient()
     {
     }
+    void run();
     int sleep(uint sleepMicro);
     void setBarSeconds(double barSeconds)
     {
@@ -62,12 +62,6 @@ public:
         mStopped = true;
         this->send_event(&mEvStop);
     }
-    void end()
-    {
-        mEnded = true;
-        stop();
-    }
-    void run(bool exact);
 };
 
 #endif

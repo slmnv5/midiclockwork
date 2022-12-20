@@ -23,13 +23,13 @@ int MidiClockClient::sleep(uint sleepMicro)
     }
 }
 
-void MidiClockClient::run(bool exactTime)
+void MidiClockClient::run()
 {
     double sleepSec = mBarSeconds / 96;
     uint sleepMicro = sleepSec * 1.0E6;
     LOG(LogLvl::DEBUG) << "Prepared clock event, clock sleep time (ms): " << sleepSec * 1.0E3;
 
-    while (!mEnded)
+    while (!mStopped)
     {
         send_event(&mEvStart);
         LOG(LogLvl::DEBUG) << "MIDI clock running: " << !mStopped;
