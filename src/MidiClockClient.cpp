@@ -5,19 +5,18 @@
 using myclock = std::chrono::steady_clock;
 using seconds = std::chrono::duration<double>;
 
-int MidiClockClient::sleep(bool exactTime, uint sleepMicro)
+int MidiClockClient::sleep(uint sleepMicro)
 {
-    if (!exactTime)
+    if (mBusyPct == 0)
     {
         return usleep(sleepMicro);
     }
     else
     {
         auto stopAt = myclock::now() + std::chrono::microseconds(sleepMicro);
-        int result = usleep(sleepMicro * 0.9);
+        int result = usleep(sleepMicro * mBusyPct / 100);
         do
         {
-            std::this_thread::yield();
         } while (myclock::now() < stopAt);
 
         return result;
@@ -42,7 +41,7 @@ void MidiClockClient::run(bool exactTime)
             min = 1.0E6;
             for (int k = 0; k < 96; k++)
             {
-                this->sleep(exactTime, sleepMicro);
+                this->sleep(sleepMicro);
                 send_event(&mEvClock);
                 auto end = myclock::now();
                 seconds diff = end - begin;

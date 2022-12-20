@@ -12,8 +12,8 @@ int main(int argc, char *argv[])
 
 	const char *clientName = nullptr;
 	const char *dstName = nullptr;
-	const char *bar_time = nullptr;
-	bool exactTime = false;
+	const char *barSeconds = nullptr;
+	const char *busyPct = nullptr;
 
 	LOG::ReportingLevel() = LogLvl::ERROR;
 
@@ -27,13 +27,13 @@ int main(int argc, char *argv[])
 		{
 			dstName = argv[i + 1];
 		}
-		else if (strcmp(argv[i], "-b") == 0 && i + 1 < argc)
+		else if (strcmp(argv[i], "-s") == 0 && i + 1 < argc)
 		{
-			bar_time = argv[i + 1];
+			barSeconds = argv[i + 1];
 		}
-		else if (strcmp(argv[i], "-e") == 0)
+		else if (strcmp(argv[i], "-b") == 0)
 		{
-			exactTime = true;
+			busyPct = argv[i + 1];
 		}
 		else if (strcmp(argv[i], "-v") == 0)
 		{
@@ -58,24 +58,30 @@ int main(int argc, char *argv[])
 	{
 		clientName = "pimidiclock";
 	}
-	if (bar_time == nullptr)
+	if (barSeconds == nullptr)
 	{
 		help(argv[0]);
 		return 1;
 	}
+	if (busyPct == nullptr)
+	{
+		busyPct = "0";
+	}
+
 	LOG(LogLvl::INFO) << "MIDI clock client name: " << clientName;
 	MidiClockClient *mcc = nullptr;
 
 	try
 	{
 		mcc = new MidiClockClient(clientName, dstName);
-		float fbt = std::stof(std::string(bar_time));
-		fbt = max(fbt, 0.05F);
-		fbt = min(fbt, 10000.0F);
-		mcc->setBarTime(fbt);
-		LOG(LogLvl::INFO) << "Starting MIDI clock, bar time: " << mcc->getBarTime()
-						  << ",  BPM: " << mcc->getBpm() << " exact time: " << exactTime;
-		mcc->run(exactTime);
+		uint busyPctInt = std::stoi(busyPct);
+		mcc->setWaitBusyPct(busyPctInt);
+
+		double barSecondsDbl = std::stod(std::string(barSeconds));
+		mcc->setBarSeconds(barSecondsDbl);
+
+		LOG(LogLvl::INFO) << "Starting MIDI clock, bar time: " << mcc->getBarSeconds()
+						  << ",  BPM: " << mcc->getBpm() << " busy wait time %: " << mcc->getWaitBusyPct();
 	}
 	catch (exception &e)
 	{
@@ -89,7 +95,8 @@ int main(int argc, char *argv[])
 
 void help(std::string app_name)
 {
-	cout << "\nUsage: " << app_name << " -b <bar_length_seconds> [options]\n"
+	cout << "\nUsage: " << app_name << " -s <seconds_per_bar> [options]\n"
+		 << "  -b [busyPercent] percent of busy wait, optional\n"
 		 << "  -n [name] name of created MIDI port, optional\n"
 		 << "  -d [dstName] destination port to connect, optional\n"
 		 << "  -v verbose output\n"

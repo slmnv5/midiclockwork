@@ -9,6 +9,7 @@ private:
     double mBarSeconds = 2.0; // time for 1 bar is 2 seconds
     bool mStopped = false;
     bool mEnded = false;
+    uint mBusyPct = 0;
     snd_seq_event_t mEvClock;
     snd_seq_event_t mEvStart;
     snd_seq_event_t mEvStop;
@@ -26,16 +27,28 @@ public:
     virtual ~MidiClockClient()
     {
     }
-    int sleep(bool exactTime, uint sleepMicro);
-    void setBarTime(float bar_time)
+    int sleep(uint sleepMicro);
+    void setBarSeconds(double barSeconds)
     {
-        this->mBarSeconds = abs(bar_time);
+        barSeconds = std::max(barSeconds, 0.05);
+        barSeconds = std::min(barSeconds, 1000.0);
+        this->mBarSeconds = abs(barSeconds);
     }
-    float getBarTime() const
+    double getBarSeconds() const
     {
         return this->mBarSeconds;
     }
-    float getBpm() const
+    void setWaitBusyPct(uint busyPct)
+    {
+        busyPct = std::min(busyPct, 100U);
+        this->mBusyPct = busyPct;
+    }
+    uint getWaitBusyPct()
+    {
+        return this->mBusyPct;
+    }
+
+    double getBpm() const
     {
         return 60 / this->mBarSeconds * 4;
     }
