@@ -27,12 +27,12 @@ void MidiClockClient::run()
 {
     double sleepSec = mBarSeconds / 96;
     uint sleepMicro = sleepSec * 1.0E6;
-    LOG(LogLvl::DEBUG) << "Prepared clock event, clock sleep time (ms): " << sleepSec * 1.0E3;
+    LOG(LogLvl::INFO) << "Prepared clock event, clock sleep time (ms): " << sleepSec * 1.0E3;
 
     while (!mStopped)
     {
         send_event(&mEvStart);
-        LOG(LogLvl::DEBUG) << "MIDI clock running: " << !mStopped;
+        LOG(LogLvl::INFO) << "MIDI clock running";
         auto begin = myclock::now();
         double sum, max, min;
         while (!mStopped)
@@ -52,9 +52,9 @@ void MidiClockClient::run()
                 sum += (secs);
             }
             auto aver = sum / 96;
-            LOG(LogLvl::DEBUG) << std::fixed << std::setprecision(3)
-                               << "\taver. error (ms): " << (aver - sleepSec) * 1000
-                               << "\tspread (ms): " << (max - min) * 1000;
+            LOG(LogLvl::INFO) << std::fixed << std::setprecision(3)
+                              << "\taver. error (ms): " << (aver - sleepSec) * 1000
+                              << "\tspread (ms): " << (max - min) * 1000;
         }
     }
     send_event(&mEvStop);

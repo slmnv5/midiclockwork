@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
 	const char *barSeconds = nullptr;
 	const char *busyPct = nullptr;
 
-	LOG::ReportingLevel() = LogLvl::ERROR;
+	LOG::ReportingLevel() = LogLvl::INFO;
 
 	for (int i = 1; i < argc; i++)
 	{
@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
 
 void help(std::string app_name)
 {
-	cout << "\nUsage: " << app_name << " -s <seconds_per_bar> [options]\n"
+	cout << "\nUsage: " << app_name << " -s <secondsPerBar> [options]\n"
 		 << "  -b [busyPercent] percent of busy wait, optional\n"
 		 << "  -n [name] name of created MIDI port, optional\n"
 		 << "  -d [dstName] destination port to connect, optional\n"
