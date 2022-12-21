@@ -14,7 +14,7 @@ int MidiClockClient::sleep(uint sleepMicro)
     else
     {
         auto stopAt = myclock::now() + std::chrono::microseconds(sleepMicro);
-        int result = usleep(sleepMicro * mBusyPct / 100);
+        int result = usleep(sleepMicro * (100 - mBusyPct) / 100);
         do
         {
         } while (myclock::now() < stopAt);
