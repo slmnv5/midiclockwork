@@ -3,8 +3,6 @@
 #include "MidiClockClient.hpp"
 #include "lib/log.hpp"
 
-using namespace std;
-
 void help(std::string app_name);
 
 int main(int argc, char *argv[])
@@ -85,7 +83,7 @@ int main(int argc, char *argv[])
 
 		mcc->run();
 	}
-	catch (exception &e)
+	catch (std::exception &e)
 	{
 		LOG(LogLvl::ERROR) << "Completed with error: " << e.what();
 		help(argv[0]);
