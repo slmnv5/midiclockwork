@@ -1,4 +1,4 @@
-# pimidiclock
+# midiclockwork
 ## Send MIDI clock from Linux, measure jitter and delay
 
 Send MIDI clock with specified frequency (given as seconds per bar) and measure average delay (actual-planned) and average spread (max-min) time between sent messages. This is used to test MIDI clock jitter and delay on Linux system.
